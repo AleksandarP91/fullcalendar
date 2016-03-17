@@ -1,0 +1,162 @@
+﻿@using fullcalendar.Models
+
+@{
+    ViewBag.Title = "Home Page";
+}
+@section scripts{
+
+
+
+<script type="text/javascript" >
+
+    $(document).ready(function () {
+
+
+        var events = { url: '/Home/getevents/' };
+
+
+        var eventsLoaded = false;
+        // page is now ready, initialize the calendar...
+
+        $('#calendar').fullCalendar({
+            header: {
+
+                left: 'prev,next today',
+                center: 'title,foobar',
+                right: 'timelineMonth,agendaWeek,agendaDay'
+            },
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            defaultView: 'timelineMonth',
+            eventOverlap: false,
+
+
+            events: '/Home/getevents/',
+
+            //[
+            //        { "id": "1", "resourceId": "b", "start": "2016-03-15T02:00:00", "end": "2016-03-15T07:00:00", "title": "event 1" },
+            //{ "id": "2", "resourceId": "c", "start": "2016-03-16T05:00:00", "end": "2016-03-16T22:00:00", "title": "event 2" },
+            //{ "id": "3", "resourceId": "d", "start": "2016-03-17", "end": "2016-03-17", "title": "event 3" },
+            //{ "id": "4", "resourceId": "e", "start": "2016-03-18T03:00:00", "end": "2016-03-18T08:00:00", "title": "event 4" },
+            //{ "id": "5", "resourceId": "f", "start": "2016-03-19T00:30:00", "end": "2016-03-19T02:30:00", "title": "event 5" }
+
+            //],
+
+
+
+
+            resources: '/Home/getresources/',
+            //[
+
+            //        { "id": "a", "title": "Auditorium A" },
+            //{ "id": "b", "title": "Auditorium B", "eventColor": "green" },
+            //{ "id": "c", "title": "Auditorium C", "eventColor": "orange" },
+            //{
+            //    "id": "d", "title": "Auditorium D", "children": [
+            //      { "id": "d1", "title": "Room D1" },
+            //      { "id": "d2", "title": "Room D2" }
+            //    ]
+            //},
+            //{ "id": "e", "title": "Auditorium E" },
+            //{ "id": "f", "title": "Auditorium F", "eventColor": "red" },
+            //{ "id": "g", "title": "Auditorium G" },
+            //{ "id": "h", "title": "Auditorium H" },
+            //{ "id": "i", "title": "Auditorium I" },
+            //{ "id": "j", "title": "Auditorium J" },
+            //{ "id": "k", "title": "Auditorium K" },
+            //{ "id": "l", "title": "Auditorium L" },
+            //{ "id": "m", "title": "Auditorium M" },
+            //{ "id": "n", "title": "Auditorium N" },
+            //{ "id": "o", "title": "Auditorium O" },
+            //{ "id": "p", "title": "Auditorium P" },
+            //{ "id": "q", "title": "Auditorium Q" },
+            //{ "id": "r", "title": "Auditorium R" },
+            //{ "id": "s", "title": "Auditorium S" },
+            //{ "id": "t", "title": "Auditorium T" },
+            //{ "id": "u", "title": "Auditorium U" },
+            //{ "id": "v", "title": "Auditorium V" },
+            //{ "id": "w", "title": "Auditorium W" },
+            //{ "id": "x", "title": "Auditorium X" },
+            //{ "id": "y", "title": "Auditorium Y" },
+            //{ "id": "z", "title": "Auditorium Z" }
+            //    ],
+
+            //theme: true,
+            //header: {
+            //    left: 'prev, next, today',
+            //    center: 'title',
+            //    right: 'timelineMonth,agendaWeek,agendaDay'
+            //},
+
+            //defaultView: 'timelineMonth',
+            eventOverlap: false,
+            editable: true,
+            allDaySlot: false,
+            selectable: true,
+            slotMinutes: 15,
+            groupByResource: true,
+            editable: true,
+            eventResize: function (event, delta, revertFunc) {
+
+                var mydata = {
+                    'id': event.id,
+                    'end': event.end.format(),
+
+                }
+
+      
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("changedate", "Home"))",
+                    dataType: "json",
+                    traditional: true,
+                    data: JSON.stringify(mydata),
+                   
+                });
+
+
+
+
+            },
+
+            dayClick: function (date, jsEvent, view) {
+
+                window.location.href = "/home/create"
+
+
+            },
+            eventClick: function (calEvent, jsEvent, view) {
+
+
+
+                alert('Event: ' + calEvent.title);
+
+            },
+
+            // put your options and callbacks here
+        });
+
+
+
+
+    });
+</script>
+
+
+
+}
+
+<div class="jumbotron">
+    
+    <h1>Calendar</h1>
+    
+</div>
+
+<div class="row">
+    
+        <button onclick="window.location.href = '/home/addresource'">+Resource</button>
+        
+        <div id='calendar'></div>
+    
+</div>
